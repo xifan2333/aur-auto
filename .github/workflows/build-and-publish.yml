@@ -114,6 +114,29 @@ jobs:
           pkgver=$(awk -F'= *' '$1=="pkgver"{print $2; exit}' "${pkg_dir}/PKGBUILD")
           echo "version=${pkgver}" >> "${GITHUB_OUTPUT}"
 
+      - name: Prepare assets list
+        id: assets
+        run: |
+          pkg_dir="pkgs/${{ matrix.package }}"
+          assets="${pkg_dir}/.SRCINFO"
+
+          # Check for optional files and add to assets if they exist
+          shopt -s nullglob
+          for pattern in "*.install" "*.patch" "*.sh" "*.service"; do
+            for file in "${pkg_dir}"/${pattern}; do
+              if [[ -f "${file}" ]]; then
+                assets="${assets}"$'\n'"${file}"
+              fi
+            done
+          done
+
+          # Export as multiline output
+          {
+            echo "list<<EOF"
+            echo "${assets}"
+            echo "EOF"
+          } >> "${GITHUB_OUTPUT}"
+
       - name: Publish to AUR
         uses: KSXGitHub/github-actions-deploy-aur@v2.7.0
         with:
@@ -129,7 +152,4 @@ jobs:
             Automated build and publish via GitHub Actions.
 
             Co-Authored-By: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
-          assets: |
-            pkgs/${{ matrix.package }}/.SRCINFO
-            pkgs/${{ matrix.package }}/*.install
-            pkgs/${{ matrix.package }}/*.patch
+          assets: ${{ steps.assets.outputs.list }}
