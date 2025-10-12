@@ -9,3 +9,4 @@ pkgs/*/src/
 *.log
 *.cache/
 *.tmp
+.workflow/

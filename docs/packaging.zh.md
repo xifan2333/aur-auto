@@ -7,6 +7,8 @@
 - `pkgs/<包名>/.SRCINFO`：通过 `makepkg --printsrcinfo` 重新生成。
 - `pkgs/<包名>/upstream.sh`：定义包的更新钩子，实现自动化。
 - `scripts/update-package.sh`：通用框架脚本，调用各包钩子。
+- `.github/workflows/monitor-upstream.yml`：定时检测上游版本更新。
+- `.github/workflows/build-and-publish.yml`：自动构建并发布到 AUR。
 
 补丁或启动脚本请放在对应包目录下。AppImage 的桌面集成（包装脚本、图标、`.desktop` 文件）应在 `package()` 中生成，不要直接提交二进制资产。
 

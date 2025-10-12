@@ -1,0 +1,134 @@
+name: Build and Publish to AUR
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'pkgs/*/PKGBUILD'
+      - 'pkgs/*/.SRCINFO'
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package to build and publish'
+        required: true
+        type: string
+      skip_publish:
+        description: 'Skip AUR publishing (dry-run)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  detect-changed-packages:
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.detect.outputs.packages }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect changed packages
+        id: detect
+        run: |
+          set -euo pipefail
+
+          if [[ -n "${{ github.event.inputs.package }}" ]]; then
+            echo "packages=[\"${{ github.event.inputs.package }}\"]" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          # Detect packages with PKGBUILD or .SRCINFO changes
+          changed_files=$(git diff --name-only HEAD^ HEAD || git diff --name-only HEAD)
+          packages=$(echo "${changed_files}" | grep -E '^pkgs/[^/]+/(PKGBUILD|\.SRCINFO)$' | cut -d'/' -f2 | sort -u | jq -R -s -c 'split("\n")[:-1]')
+
+          if [[ "${packages}" == "[]" || -z "${packages}" ]]; then
+            echo "No package changes detected"
+            echo "packages=[]" >> "${GITHUB_OUTPUT}"
+          else
+            echo "Detected package changes: ${packages}"
+            echo "packages=${packages}" >> "${GITHUB_OUTPUT}"
+          fi
+
+  build-and-validate:
+    needs: detect-changed-packages
+    if: needs.detect-changed-packages.outputs.packages != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: ${{ fromJson(needs.detect-changed-packages.outputs.packages) }}
+      fail-fast: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build and validate package
+        uses: heyhusen/archlinux-package-action@v2
+        with:
+          path: pkgs/${{ matrix.package }}
+          flags: '-s --noconfirm'
+          namcap: true
+          srcinfo: true
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.package }}-${{ github.run_id }}
+          path: |
+            pkgs/${{ matrix.package }}/*.pkg.tar.zst
+            pkgs/${{ matrix.package }}/*.pkg.tar.zst.sig
+          retention-days: 90
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.package }}-logs-${{ github.run_id }}
+          path: |
+            pkgs/${{ matrix.package }}/*.log
+            pkgs/${{ matrix.package }}/src/
+          retention-days: 30
+          if-no-files-found: ignore
+
+  publish-to-aur:
+    needs: [detect-changed-packages, build-and-validate]
+    if: needs.detect-changed-packages.outputs.packages != '[]' && github.event.inputs.skip_publish != 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: ${{ fromJson(needs.detect-changed-packages.outputs.packages) }}
+      fail-fast: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get package version
+        id: pkgver
+        run: |
+          pkg_dir="pkgs/${{ matrix.package }}"
+          pkgver=$(awk -F'= *' '$1=="pkgver"{print $2; exit}' "${pkg_dir}/PKGBUILD")
+          echo "version=${pkgver}" >> "${GITHUB_OUTPUT}"
+
+      - name: Publish to AUR
+        uses: KSXGitHub/github-actions-deploy-aur@v2.7.0
+        with:
+          pkgname: ${{ matrix.package }}
+          pkgbuild: pkgs/${{ matrix.package }}/PKGBUILD
+          commit_username: github-actions[bot]
+          commit_email: github-actions[bot]@users.noreply.github.com
+          ssh_private_key: ${{ secrets.AUR_SSH_KEY }}
+          commit_message: |
+            Update to ${{ steps.pkgver.outputs.version }}
+
+            Automated build and publish via GitHub Actions.
+
+            Co-Authored-By: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+          assets: |
+            pkgs/${{ matrix.package }}/.SRCINFO
+            pkgs/${{ matrix.package }}/*.install
+            pkgs/${{ matrix.package }}/*.patch
