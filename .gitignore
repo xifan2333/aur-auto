@@ -1,0 +1,11 @@
+/pkg/
+/src/
+pkgs/*/pkg/
+pkgs/*/src/
+*.pkg.tar.zst
+*.pkg.tar.xz
+*.pkg.tar.*
+*.AppImage
+*.log
+*.cache/
+*.tmp
