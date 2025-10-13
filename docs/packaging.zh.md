@@ -14,12 +14,37 @@
 
 ## 自动更新流程
 1. 执行 `scripts/update-package.sh <包名>` 检测上游新版本。
-2. 包的钩子返回下载地址，框架负责下载并计算新的 SHA256。
-3. `pkg_update_files` 写入 `pkgver`、重置 `pkgrel`、更新 `source_x86_64` 与 `sha256sums_x86_64`，然后运行 `makepkg --printsrcinfo > .SRCINFO`。
-4. 脚本输出版本变更（`old -> new`）。需要强制刷新时可使用 `--force`。
+2. 框架调用 `pkg_detect_latest()` 获取最新版本号。
+3. 框架调用 `pkg_get_update_params(version)` 获取更新参数（包自己下载和计算校验和）。
+4. 框架调用 `pkg_update_files()` 更新 PKGBUILD（包完全控制更新逻辑）。
+5. 脚本输出版本变更（`old -> new`）。需要强制刷新时可使用 `--force`。
 
-目前的示例：
-- `kdenlive-appimage-pure`：从 KDE 官方下载 AppImage，自动解析最新稳定版。
+### upstream.sh 接口说明
+
+框架会依次调用以下函数（包必须实现）：
+
+**必需函数**：
+
+- `pkg_detect_latest()`
+  - 返回：最新版本号字符串
+
+- `pkg_get_update_params(version)`
+  - 参数：`version` - 最新版本号
+  - 返回：`"<url> <filename> <pkgver> <hash_algo> <checksum>"`（空格分隔）
+    - `url`: 下载链接
+    - `filename`: 文件名
+    - `pkgver`: PKGBUILD 中的版本号（可能与 version 不同）
+    - `hash_algo`: 校验算法（sha256, sha512, b2, md5 等）
+    - `checksum`: 校验和值
+
+- `pkg_update_files(url, filename, pkgver, hash_algo, checksum)`
+  - 参数：从 `pkg_get_update_params` 返回的5个值
+  - 功能：更新 PKGBUILD 和 .SRCINFO
+
+**设计原则**：
+- 框架只做协调，不控制业务逻辑
+- 包自己决定下载、校验算法、版本格式
+- 统一接口格式，包完全自主
 
 ## 手动验证清单
 - `makepkg --cleanbuild --syncdeps`

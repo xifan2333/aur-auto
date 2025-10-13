@@ -3,21 +3,48 @@
 [中文版本](packaging.zh.md)
 
 ## Repository Layout
-- `pkgs/<pkgname>/PKGBUILD`: canonical package recipe.
+- `pkgs/<pkgname>/PKGBUILD`: standard packaging script.
 - `pkgs/<pkgname>/.SRCINFO`: regenerated via `makepkg --printsrcinfo`.
-- `pkgs/<pkgname>/upstream.sh`: package-specific hooks for update automation.
-- `scripts/update-package.sh`: framework script invoking per-package hooks.
+- `pkgs/<pkgname>/upstream.sh`: defines package update hooks for automation.
+- `scripts/update-package.sh`: generic framework script that invokes package hooks.
+- `.github/workflows/monitor-upstream.yml`: scheduled detection of upstream version updates.
+- `.github/workflows/build-and-publish.yml`: automated building and publishing to AUR.
 
-Auxiliary patches or launchers should live alongside the PKGBUILD. AppImage desktop integration (wrappers, icons, `.desktop` entries) is generated inside `package()` instead of being committed as static files.
+Patches or launcher scripts should be placed in the corresponding package directory. AppImage desktop integration (wrapper scripts, icons, `.desktop` files) should be generated in `package()` instead of committing binary assets directly.
 
 ## Auto-Update Flow
-1. Run `scripts/update-package.sh <pkgname>` to detect upstream releases.
-2. The package hook reports the download URL; the framework fetches the artifact and calculates the new SHA256.
-3. `pkg_update_files` writes `pkgver`, resets `pkgrel`, updates `source_x86_64`/`sha256sums_x86_64`, and calls `makepkg --printsrcinfo > .SRCINFO`.
-4. The script prints the version transition (`old -> new`). Use `--force` to refresh metadata even when versions match.
+1. Execute `scripts/update-package.sh <pkgname>` to detect new upstream versions.
+2. Framework calls `pkg_detect_latest()` to get the latest version number.
+3. Framework calls `pkg_get_update_params(version)` to get update parameters (package downloads and calculates checksum itself).
+4. Framework calls `pkg_update_files()` to update PKGBUILD (package has complete control over update logic).
+5. Script outputs version change (`old -> new`). Use `--force` to force refresh when needed.
 
-Current example:
-- `kdenlive-appimage-pure`: AppImage build sourced from KDE downloads with automatic version discovery.
+### upstream.sh Interface
+
+The framework calls the following functions in sequence (packages must implement):
+
+**Required Functions**:
+
+- `pkg_detect_latest()`
+  - Returns: latest version number string
+
+- `pkg_get_update_params(version)`
+  - Parameters: `version` - latest version number
+  - Returns: `"<url> <filename> <pkgver> <hash_algo> <checksum>"` (space-separated)
+    - `url`: download link
+    - `filename`: file name
+    - `pkgver`: version number in PKGBUILD (may differ from version)
+    - `hash_algo`: checksum algorithm (sha256, sha512, b2, md5, etc.)
+    - `checksum`: checksum value
+
+- `pkg_update_files(url, filename, pkgver, hash_algo, checksum)`
+  - Parameters: the 5 values returned from `pkg_get_update_params`
+  - Function: update PKGBUILD and .SRCINFO
+
+**Design Principles**:
+- Framework only coordinates, does not control business logic
+- Packages decide their own download, checksum algorithm, version format
+- Unified interface format, packages are fully autonomous
 
 ## Manual Verification Checklist
 - `makepkg --cleanbuild --syncdeps`
@@ -25,7 +52,7 @@ Current example:
 - Install test: `sudo pacman -U kdenlive-appimage-pure-*.pkg.tar.zst`, verify launch and icon.
 - Cleanup: `rm -rf src pkg *.pkg.tar.* *.AppImage`
 
-## Release Gates
-- Commit both `PKGBUILD` and `.SRCINFO`.
-- Attach build/test logs in PRs or CI artifacts.
-- If upstream structure changes, update `upstream.sh` promptly and emit clear error messages so CI fails fast.
+## Pre-Release Checklist
+- Always commit both `PKGBUILD` and `.SRCINFO`.
+- PRs or CI must include build/test logs.
+- If upstream directory structure changes, update `upstream.sh` parsing logic promptly and output clear error messages for quick CI troubleshooting.

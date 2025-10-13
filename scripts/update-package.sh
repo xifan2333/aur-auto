@@ -60,8 +60,8 @@ if ! declare -f pkg_detect_latest >/dev/null; then
 	exit 1
 fi
 
-if ! declare -f pkg_source_info >/dev/null; then
-	echo "pkg_source_info is not defined in ${UPSTREAM_HELPER}" >&2
+if ! declare -f pkg_get_update_params >/dev/null; then
+	echo "pkg_get_update_params is not defined in ${UPSTREAM_HELPER}" >&2
 	exit 1
 fi
 
@@ -87,23 +87,12 @@ if [[ "${latest_version}" == "${current_version}" && "${FORCE}" -eq 0 ]]; then
 	exit 0
 fi
 
-read -r source_url artifact <<<"$(pkg_source_info "${latest_version}")"
-if [[ -z "${source_url}" || -z "${artifact}" ]]; then
-	echo "pkg_source_info must return '<url> <filename>'" >&2
+read -r url filename pkgver hash_algo checksum <<<"$(pkg_get_update_params "${latest_version}")"
+if [[ -z "${url}" || -z "${filename}" || -z "${pkgver}" || -z "${hash_algo}" || -z "${checksum}" ]]; then
+	echo "pkg_get_update_params must return '<url> <filename> <pkgver> <hash_algo> <checksum>'" >&2
 	exit 1
 fi
 
-tmpdir="$(mktemp -d)"
-trap 'rm -rf "${tmpdir}"' EXIT
-artifact_path="${tmpdir}/${artifact}"
-
-if declare -f pkg_fetch_source >/dev/null; then
-	pkg_fetch_source "${source_url}" "${artifact_path}"
-else
-	curl -fsSL --retry 3 --retry-delay 2 -o "${artifact_path}" "${source_url}"
-fi
-
-sha256="$(sha256sum "${artifact_path}" | awk '{print $1}')"
-pkg_update_files "${latest_version}" "${sha256}" "${source_url}" "${artifact}"
+pkg_update_files "${url}" "${filename}" "${pkgver}" "${hash_algo}" "${checksum}"
 
 echo "Updated ${PKG_NAME} ${current_version} -> ${latest_version}"
