@@ -32,6 +32,8 @@ source "${META_FILE}"
 : "${AUR_EMAIL:?Missing AUR_EMAIL in ${META_FILE}}"
 : "${GITHUB_SLUG:=}"
 
+export AUR_USER AUR_EMAIL GITHUB_SLUG
+
 declare -a pkg_dirs=()
 while IFS= read -r -d '' dir; do
 	pkg_dirs+=("${dir}")
@@ -46,12 +48,25 @@ done
 render_template() {
 	local template="$1"
 	local output="$2"
-	local content
-	content="$(cat "${template}")"
-	content="${content//\{\{AUR_USER\}\}/${AUR_USER}}"
-	content="${content//\{\{AUR_EMAIL\}\}/${AUR_EMAIL}}"
-	content="${content//\{\{PACKAGE_TABLE\}\}/${table}}"
-	printf '%s\n' "${content}" > "${output}"
+
+	# Export variables for Python
+	export TEMPLATE_FILE="${template}"
+	export PKG_TABLE="${table}"
+
+	# Use Python for reliable multi-line replacement
+	python3 -c '
+import os
+with open(os.environ["TEMPLATE_FILE"], "r") as f:
+    content = f.read()
+
+# Expand table newlines
+table = os.environ["PKG_TABLE"].replace("\\n", "\n")
+
+content = content.replace("{{AUR_USER}}", os.environ["AUR_USER"])
+content = content.replace("{{AUR_EMAIL}}", os.environ["AUR_EMAIL"])
+content = content.replace("{{PACKAGE_TABLE}}", table)
+print(content, end="")
+' > "${output}"
 }
 
 mapfile -t sorted_names < <(printf '%s\n' "${!dir_map[@]}" | sort)
