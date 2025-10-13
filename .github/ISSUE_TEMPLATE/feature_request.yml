@@ -1,0 +1,77 @@
+name: Feature Request
+description: Suggest a new package or feature
+title: "[FEATURE] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature or package!
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Request Type
+      description: What type of request is this?
+      options:
+        - New Package
+        - Package Enhancement
+        - Infrastructure/CI Improvement
+        - Documentation
+    validations:
+      required: true
+
+  - type: input
+    id: package
+    attributes:
+      label: Package/Component Name
+      description: Name of the package or component
+      placeholder: e.g., firefox-appimage
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear description of what you want to happen
+      placeholder: Describe the feature or package
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why is this feature/package useful?
+      placeholder: Explain the use case
+    validations:
+      required: true
+
+  - type: textarea
+    id: upstream
+    attributes:
+      label: Upstream Information
+      description: For new packages, provide upstream sources
+      placeholder: |
+        - Project URL: https://...
+        - Download URL: https://...
+        - Release page: https://...
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Have you considered any alternatives?
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context or screenshots
+    validations:
+      required: false

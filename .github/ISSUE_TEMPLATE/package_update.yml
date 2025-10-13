@@ -1,0 +1,53 @@
+name: Package Update
+description: Report outdated package version
+title: "[UPDATE] "
+labels: ["update"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Report an outdated package that needs updating.
+
+  - type: input
+    id: package
+    attributes:
+      label: Package Name
+      description: Which package needs updating?
+      placeholder: e.g., kdenlive-appimage-pure
+    validations:
+      required: true
+
+  - type: input
+    id: current
+    attributes:
+      label: Current Version
+      description: Current version in AUR
+      placeholder: e.g., 24.08.1-1
+    validations:
+      required: true
+
+  - type: input
+    id: latest
+    attributes:
+      label: Latest Version
+      description: Latest upstream version
+      placeholder: e.g., 24.08.2
+    validations:
+      required: true
+
+  - type: input
+    id: upstream-url
+    attributes:
+      label: Upstream Release URL
+      description: Link to the upstream release
+      placeholder: https://...
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
+      description: Any breaking changes or important information about this update?
+    validations:
+      required: false
