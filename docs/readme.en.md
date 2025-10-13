@@ -22,6 +22,7 @@ Automation toolkit for maintaining Arch User Repository packages with GitHub Act
 ## Packages
 | Package | Description | Upstream | Version | Build Status |
 | --- | --- | --- | --- | --- |
-| `kdenlive-appimage-pure` | A non-linear video editor for Linux using the MLT video framework (AppImage build) | `Kdenlive` | 25.08.2 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan/aur-auto/release.yml?branch=main&logo=github&label=build)](https://github.com/xifan/aur-auto/actions/workflows/release.yml) |
+| `kdenlive-appimage-pure` | A non-linear video editor for Linux using the MLT video framework (AppImage build) | `Kdenlive` | 25.08.2 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan/aur-auto/actions/workflows/build-and-publish.yml) |
+| `linuxqq-appimage-wayland` | New Linux QQ based on Electron (Wayland native support, AppImage build) | `LinuxQQ` | 3.2.18_250626 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan/aur-auto/actions/workflows/build-and-publish.yml) |
 
 Regenerate this README after documentation or metadata changes with `scripts/build-readme.sh`.
