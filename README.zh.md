@@ -15,14 +15,14 @@
 - xifan `<xifan2333@gmail.com>`
 
 ## 文档
-- 仓库规范：[English](docs/guidelines.en.md) · [中文](docs/guidelines.zh.md)
-- 打包流程：[English](docs/packaging.en.md) · [中文](docs/packaging.zh.md)
-- README (English Version): [docs/readme.en.md](docs/readme.en.md)
+- 仓库规范：[English](docs/guidelines.en.md) | [简体中文](docs/guidelines.zh.md)
+- 打包流程： [English](docs/packaging.en.md) | [简体中文](docs/packaging.zh.md)
+- README：[English](README.md) | [简体中文](README.zh.md)
 
 ## 软件包
 | Package | Description | Upstream | Version | Build Status |
 | --- | --- | --- | --- | --- |
-| `kdenlive-appimage-pure` | A non-linear video editor for Linux using the MLT video framework (AppImage build) | `Kdenlive` | 25.08.2 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan/aur-auto/actions/workflows/build-and-publish.yml) |
-| `linuxqq-appimage-wayland` | New Linux QQ based on Electron (Wayland native support, AppImage build) | `LinuxQQ` | 3.2.18_250626 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan/aur-auto/actions/workflows/build-and-publish.yml) |
+| `kdenlive-appimage-pure` | A non-linear video editor for Linux using the MLT video framework (AppImage build) | `Kdenlive` | 25.08.2 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan2333/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan2333/aur-auto/actions/workflows/build-and-publish.yml) |
+| `linuxqq-appimage-wayland` | New Linux QQ based on Electron (Wayland native support, AppImage build) | `LinuxQQ` | 3.2.18_250626 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan2333/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan2333/aur-auto/actions/workflows/build-and-publish.yml) |
 
 文档或元数据更新后，请运行 `scripts/build-readme.sh` 重新生成 README。

@@ -15,9 +15,9 @@ Automation toolkit for maintaining Arch User Repository packages with GitHub Act
 - {{AUR_USER}} `<{{AUR_EMAIL}}>`
 
 ## Documentation
-- Repository Guidelines: [English](docs/guidelines.en.md) · [中文](docs/guidelines.zh.md)
-- Packaging Workflow: [English](docs/packaging.en.md) · [中文](docs/packaging.zh.md)
-- README (中文版本): [docs/readme.zh.md](docs/readme.zh.md)
+- Repository Guidelines: [English](docs/guidelines.en.md) | [简体中文](docs/guidelines.zh.md)
+- Packaging Workflow: [English](docs/packaging.en.md) | [简体中文](docs/packaging.zh.md)
+- README: [English](README.md) | [简体中文](README.zh.md)
 
 ## Packages
 {{PACKAGE_TABLE}}

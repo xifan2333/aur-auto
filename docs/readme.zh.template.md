@@ -15,9 +15,9 @@
 - {{AUR_USER}} `<{{AUR_EMAIL}}>`
 
 ## 文档
-- 仓库规范：[English](docs/guidelines.en.md) · [中文](docs/guidelines.zh.md)
-- 打包流程：[English](docs/packaging.en.md) · [中文](docs/packaging.zh.md)
-- README (English Version): [docs/readme.en.md](docs/readme.en.md)
+- 仓库规范：[English](docs/guidelines.en.md) | [简体中文](docs/guidelines.zh.md)
+- 打包流程： [English](docs/packaging.en.md) | [简体中文](docs/packaging.zh.md)
+- README：[English](README.md) | [简体中文](README.zh.md)
 
 ## 软件包
 {{PACKAGE_TABLE}}

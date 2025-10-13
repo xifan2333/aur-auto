@@ -15,14 +15,14 @@ Automation toolkit for maintaining Arch User Repository packages with GitHub Act
 - xifan `<xifan2333@gmail.com>`
 
 ## Documentation
-- Repository Guidelines: [English](docs/guidelines.en.md) · [中文](docs/guidelines.zh.md)
-- Packaging Workflow: [English](docs/packaging.en.md) · [中文](docs/packaging.zh.md)
-- README (中文版本): [docs/readme.zh.md](docs/readme.zh.md)
+- Repository Guidelines: [English](docs/guidelines.en.md) | [简体中文](docs/guidelines.zh.md)
+- Packaging Workflow: [English](docs/packaging.en.md) | [简体中文](docs/packaging.zh.md)
+- README: [English](README.md) | [简体中文](README.zh.md)
 
 ## Packages
 | Package | Description | Upstream | Version | Build Status |
 | --- | --- | --- | --- | --- |
-| `kdenlive-appimage-pure` | A non-linear video editor for Linux using the MLT video framework (AppImage build) | `Kdenlive` | 25.08.2 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan/aur-auto/actions/workflows/build-and-publish.yml) |
-| `linuxqq-appimage-wayland` | New Linux QQ based on Electron (Wayland native support, AppImage build) | `LinuxQQ` | 3.2.18_250626 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan/aur-auto/actions/workflows/build-and-publish.yml) |
+| `kdenlive-appimage-pure` | A non-linear video editor for Linux using the MLT video framework (AppImage build) | `Kdenlive` | 25.08.2 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan2333/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan2333/aur-auto/actions/workflows/build-and-publish.yml) |
+| `linuxqq-appimage-wayland` | New Linux QQ based on Electron (Wayland native support, AppImage build) | `LinuxQQ` | 3.2.18_250626 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan2333/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan2333/aur-auto/actions/workflows/build-and-publish.yml) |
 
 Regenerate this README after documentation or metadata changes with `scripts/build-readme.sh`.

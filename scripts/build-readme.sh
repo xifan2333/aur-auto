@@ -7,7 +7,6 @@ PKG_META_DIR="${ROOT_DIR}/metadata/packages"
 TEMPLATE_EN="${ROOT_DIR}/docs/readme.en.template.md"
 TEMPLATE_ZH="${ROOT_DIR}/docs/readme.zh.template.md"
 OUTPUT_ROOT="${ROOT_DIR}/README.md"
-OUTPUT_EN_DOC="${ROOT_DIR}/docs/readme.en.md"
 OUTPUT_ZH="${ROOT_DIR}/README.zh.md"
 
 if [[ ! -f "${META_FILE}" ]]; then
@@ -120,7 +119,6 @@ for name in "${sorted_names[@]}"; do
 done
 
 render_template "${TEMPLATE_EN}" "${OUTPUT_ROOT}"
-render_template "${TEMPLATE_EN}" "${OUTPUT_EN_DOC}"
 render_template "${TEMPLATE_ZH}" "${OUTPUT_ZH}"
 
 echo "README.md regenerated from template."
