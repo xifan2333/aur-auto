@@ -80,7 +80,7 @@ jobs:
             pkg="${packages}"
             echo "Checking ${pkg}..."
             if scripts/update-package.sh "${pkg}" ${force_flag}; then
-              if git diff --quiet "pkgs/${pkg}/PKGBUILD" "pkgs/${pkg}/.SRCINFO" 2>/dev/null; then
+              if git diff --quiet "pkgs/${pkg}/PKGBUILD" 2>/dev/null; then
                 echo "No changes detected for ${pkg}"
               else
                 echo "Updates detected for ${pkg}"
