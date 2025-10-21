@@ -20,7 +20,7 @@ on:
         default: false
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   detect-changed-packages:
@@ -75,36 +75,12 @@ jobs:
           namcap: true
           srcinfo: true
 
-      - name: Commit generated .SRCINFO
-        run: |
-          # Configure Git
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Check if .SRCINFO was generated and differs from repo
-          if [[ -f "pkgs/${{ matrix.package }}/.SRCINFO" ]]; then
-            git add "pkgs/${{ matrix.package }}/.SRCINFO"
-
-            if ! git diff --cached --quiet; then
-              git commit -m "ci: generate .SRCINFO for ${{ matrix.package }}
-
-          Automated .SRCINFO generation via build-and-publish workflow.
-
-          Co-Authored-By: github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
-
-              # Pull and push
-              git pull --rebase origin main || {
-                echo "Failed to rebase, attempting merge" >&2
-                git rebase --abort
-                git pull --no-rebase origin main
-              }
-              git push origin main
-            else
-              echo ".SRCINFO is already up to date"
-            fi
-          else
-            echo "Warning: .SRCINFO not found after build" >&2
-          fi
+      - name: Upload .SRCINFO for publishing
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.package }}-srcinfo-${{ github.run_id }}
+          path: pkgs/${{ matrix.package }}/.SRCINFO
+          retention-days: 1
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -137,6 +113,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Download .SRCINFO artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.package }}-srcinfo-${{ github.run_id }}
+          path: pkgs/${{ matrix.package }}
 
       - name: Get package version
         id: pkgver

@@ -24,5 +24,6 @@ Automation toolkit for maintaining Arch User Repository packages with GitHub Act
 | --- | --- | --- | --- | --- |
 | `kdenlive-appimage-pure` | A non-linear video editor for Linux using the MLT video framework (AppImage build) | `Kdenlive` | 25.08.2 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan2333/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan2333/aur-auto/actions/workflows/build-and-publish.yml) |
 | `linuxqq-appimage-wayland` | New Linux QQ based on Electron (Wayland native support, AppImage build) | `LinuxQQ` | 3.2.18_250626 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan2333/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan2333/aur-auto/actions/workflows/build-and-publish.yml) |
+| `unibarrage-bin` | High-performance real-time proxy tool to unify live barrage data collection across multiple streaming platforms | `unibarrage` | 1.0.1 | N/A |
 
 Regenerate this README after documentation or metadata changes with `scripts/build-readme.sh`.

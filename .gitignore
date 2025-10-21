@@ -10,3 +10,4 @@ pkgs/*/src/
 *.cache/
 *.tmp
 .workflow/
+.SRCINFO
