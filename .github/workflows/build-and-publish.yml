@@ -74,24 +74,8 @@ jobs:
           namcap: true
           srcinfo: true
 
-      - name: List generated files
-        run: |
-          echo "=== Files in package directory ==="
-          ls -la "pkgs/${{ matrix.package }}/" || true
-          echo "=== Looking for .SRCINFO ==="
-          find "pkgs/${{ matrix.package }}" -name ".SRCINFO" -ls || true
-          echo "=== Looking for package files ==="
-          find "pkgs/${{ matrix.package }}" -name "*.pkg.tar.zst" -ls || true
-
-      - name: Upload .SRCINFO for publishing
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.package }}-srcinfo-${{ github.run_id }}
-          path: pkgs/${{ matrix.package }}/.SRCINFO
-          retention-days: 1
-          if-no-files-found: error
-
-      - name: Upload build artifacts
+      - name: Upload build artifacts (optional)
+        if: false  # Disabled: AUR doesn't need .pkg.tar.zst files
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.package }}-${{ github.run_id }}
@@ -124,33 +108,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download .SRCINFO artifact
-        id: download-srcinfo
-        continue-on-error: true
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ matrix.package }}-srcinfo-${{ github.run_id }}
-          path: pkgs/${{ matrix.package }}
-
-      - name: Generate .SRCINFO if not present
+      - name: Generate .SRCINFO
         run: |
           pkg_dir="pkgs/${{ matrix.package }}"
-          if [[ ! -f "${pkg_dir}/.SRCINFO" ]]; then
-            echo "⚠️ .SRCINFO not found in artifact, generating it now..."
-            docker run --rm \
-              -v "$(pwd)/${pkg_dir}:/pkg" \
-              -w /pkg \
-              archlinux:latest \
-              bash -c "pacman -Sy --noconfirm base-devel && makepkg --printsrcinfo > .SRCINFO"
-          else
-            echo "✓ .SRCINFO found in artifact"
-          fi
+          echo "Generating .SRCINFO for ${{ matrix.package }}..."
+          docker run --rm \
+            -v "$(pwd)/${pkg_dir}:/pkg" \
+            -w /pkg \
+            archlinux:latest \
+            bash -c "pacman -Sy --noconfirm base-devel && makepkg --printsrcinfo > .SRCINFO"
 
           # Verify .SRCINFO exists
           if [[ ! -f "${pkg_dir}/.SRCINFO" ]]; then
-            echo "❌ Failed to get .SRCINFO"
+            echo "Failed to generate .SRCINFO"
             exit 1
           fi
+          echo ".SRCINFO generated successfully"
 
       - name: Get package version
         id: pkgver
