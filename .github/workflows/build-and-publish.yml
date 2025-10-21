@@ -116,7 +116,12 @@ jobs:
             -v "$(pwd)/${pkg_dir}:/pkg" \
             -w /pkg \
             archlinux:latest \
-            bash -c "pacman -Sy --noconfirm base-devel && makepkg --printsrcinfo > .SRCINFO"
+            bash -c "
+              pacman -Sy --noconfirm base-devel && \
+              useradd -m builder && \
+              chown -R builder:builder /pkg && \
+              su - builder -c 'cd /pkg && makepkg --printsrcinfo > .SRCINFO'
+            "
 
           # Verify .SRCINFO exists
           if [[ ! -f "${pkg_dir}/.SRCINFO" ]]; then
