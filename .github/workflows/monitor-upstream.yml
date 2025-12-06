@@ -119,11 +119,11 @@ jobs:
           done
 
           # Pull before push to avoid conflicts
-          git pull --rebase origin main || {
+          if ! git pull --rebase origin main; then
             echo "Failed to rebase, attempting merge" >&2
-            git rebase --abort
+            git rebase --abort || true
             git pull --no-rebase origin main
-          }
+          fi
 
           git push origin main
 
