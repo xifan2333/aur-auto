@@ -1,4 +1,4 @@
-<!-- 该文件由 docs/readme.zh.template.md 渲染而来，执行 scripts/build-readme.sh 生成 README.zh.md。 -->
+<!-- 该文件由 scripts/build-readme.sh 自动生成，请勿手动编辑。 -->
 
 # aur-auto
 
@@ -9,21 +9,16 @@
 ## 项目概览
 - 每个包通过 `pkgs/<pkgname>/upstream.sh` 钩子检测上游新版本。
 - 自动更新 PKGBUILD 元数据，在 clean chroot 中构建并推送至 AUR。
-- 为贡献者与维护者提供双语文档。
 
 ## 维护者
 - xifan `<xifan2333@gmail.com>`
 
-## 文档
-- 仓库规范：[English](docs/guidelines.en.md) | [简体中文](docs/guidelines.zh.md)
-- 打包流程： [English](docs/packaging.en.md) | [简体中文](docs/packaging.zh.md)
-- README：[English](README.md) | [简体中文](README.zh.md)
-
 ## 软件包
 | Package | Description | Upstream | Version | Build Status |
 | --- | --- | --- | --- | --- |
-| `kdenlive-appimage-pure` | A non-linear video editor for Linux using the MLT video framework (AppImage build) | `Kdenlive` | 25.08.2 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan2333/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan2333/aur-auto/actions/workflows/build-and-publish.yml) |
-| `roxybrowser-bin` | Premier Antidetect Browser - Streamline Your Workflow Effortlessly | `roxybrowser` | 3.6.1 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan2333/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan2333/aur-auto/actions/workflows/build-and-publish.yml) |
+| `hapi-git` | App for agentic coding - access coding agent anywhere (Built from source) | `hapi-git` | 0.15.3 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan2333/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan2333/aur-auto/actions/workflows/build-and-publish.yml) |
+| `kdenlive-appimage-pure` | A non-linear video editor for Linux using the MLT video framework (AppImage build) | `kdenlive` | 25.12.2 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan2333/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan2333/aur-auto/actions/workflows/build-and-publish.yml) |
+| `roxybrowser-bin` | Premier Antidetect Browser - Streamline Your Workflow Effortlessly (Unofficial Community Package) | `roxybrowser` | 3.7.2 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan2333/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan2333/aur-auto/actions/workflows/build-and-publish.yml) |
 | `unibarrage-bin` | High-performance real-time proxy tool to unify live barrage data collection across multiple streaming platforms | `unibarrage` | 1.0.1 | [![Build Status](https://img.shields.io/github/actions/workflow/status/xifan2333/aur-auto/build-and-publish.yml?branch=main&logo=github&label=build)](https://github.com/xifan2333/aur-auto/actions/workflows/build-and-publish.yml) |
 
 文档或元数据更新后，请运行 `scripts/build-readme.sh` 重新生成 README。
