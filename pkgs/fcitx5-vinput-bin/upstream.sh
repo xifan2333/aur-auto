@@ -52,32 +52,5 @@ pkg_update_files() {
 	# Update version fields
 	sed -i "s/^pkgver=.*/pkgver=${pkgver}/" "${pkgbuild}"
 	sed -i "s/^pkgrel=.*/pkgrel=1/" "${pkgbuild}"
-
-	# Extract existing checksums from the array (handles single and multi-line)
-	local block
-	block="$(awk '/^'"${hash_algo}"'sums_x86_64=/{p=1} p{print; if(/\)/) exit}' "${pkgbuild}")"
-	local -a sums
-	mapfile -t sums < <(printf '%s\n' "${block}" | grep -oP "'\K[a-fA-F0-9]+")
-
-	# Replace only the first checksum (binary package), preserve the rest
-	sums[0]="${checksum}"
-
-	# Build new single-line array
-	local new_line="${hash_algo}sums_x86_64=("
-	for i in "${!sums[@]}"; do
-		(( i > 0 )) && new_line+=" "
-		new_line+="'${sums[$i]}'"
-	done
-	new_line+=")"
-
-	# Replace entire checksum block (single or multi-line) in PKGBUILD
-	awk -v replacement="${new_line}" '
-		/^'"${hash_algo}"'sums_x86_64=/ {
-			print replacement
-			if (/\)/) next
-			while ((getline) > 0 && !/\)/) {}
-			next
-		}
-		{print}
-	' "${pkgbuild}" > "${pkgbuild}.tmp" && mv "${pkgbuild}.tmp" "${pkgbuild}"
+	sed -i "s/^${hash_algo}sums_x86_64=.*/${hash_algo}sums_x86_64=('${checksum}')/" "${pkgbuild}"
 }
