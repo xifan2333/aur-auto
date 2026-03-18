@@ -31,8 +31,8 @@ build() {
 package() {
 	cd "${srcdir}/hapi" || exit 1
 
-	# Find the built executable - build outputs to bun-linux-x64 regardless of CARCH
-	local bin_path="cli/dist-exe/bun-linux-x64/hapi"
+	# Find the built executable - build outputs to bun-linux-x64-baseline on linux x64
+	local bin_path="cli/dist-exe/bun-linux-x64-baseline/hapi"
 
 	if [[ ! -f "${bin_path}" ]]; then
 		echo "Error: Could not find built hapi binary at ${bin_path}"
