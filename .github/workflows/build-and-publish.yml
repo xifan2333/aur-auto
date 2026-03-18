@@ -83,7 +83,12 @@ jobs:
             echo "Checking ${pkg}..."
             if scripts/update-package.sh "${pkg}" ${force_flag}; then
               if git diff --quiet "pkgs/${pkg}/PKGBUILD" 2>/dev/null; then
-                echo "No changes detected for ${pkg}"
+                if [[ -n "${force_flag}" ]]; then
+                  echo "No file changes but force mode: including ${pkg}"
+                  updated_packages+=("${pkg}")
+                else
+                  echo "No changes detected for ${pkg}"
+                fi
               else
                 echo "Updates detected for ${pkg}"
                 updated_packages+=("${pkg}")
@@ -108,21 +113,26 @@ jobs:
             git add "pkgs/${pkg}/PKGBUILD"
             new_version=$(awk -F'= *' '$1=="pkgver"{print $2; exit}' "pkgs/${pkg}/PKGBUILD")
             git add README.md README.zh.md docs/readme.en.md 2>/dev/null || true
-            git commit -m "ci: update ${pkg} to ${new_version}
+            if git diff --cached --quiet; then
+              echo "Nothing to commit for ${pkg} (force mode), skipping commit"
+            else
+              git commit -m "ci: update ${pkg} to ${new_version}
 
           Automated upstream version detection.
 
           Co-Authored-By: github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+            fi
           done
 
-          # Pull before push to avoid conflicts
-          if ! git pull --rebase origin main; then
-            echo "Failed to rebase, attempting merge" >&2
-            git rebase --abort || true
-            git pull --no-rebase origin main
+          # Pull and push only if there are new commits
+          if ! git diff --quiet origin/main HEAD; then
+            if ! git pull --rebase origin main; then
+              echo "Failed to rebase, attempting merge" >&2
+              git rebase --abort || true
+              git pull --no-rebase origin main
+            fi
+            git push origin main
           fi
-
-          git push origin main
 
           echo "Successfully committed updates for: ${updated_packages[*]}"
 
