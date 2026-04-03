@@ -177,13 +177,15 @@ jobs:
             archlinux:latest \
             bash -lc '
               set -euo pipefail
-              pacman -Syu --noconfirm --needed base-devel namcap curl git fcitx5 pipewire systemd-libs
+              pacman -Syu --noconfirm --needed base-devel namcap curl git fcitx5 pipewire systemd-libs sudo
               useradd -m builder
+              printf "builder ALL=(ALL) NOPASSWD: ALL\n" > /etc/sudoers.d/builder
+              chmod 440 /etc/sudoers.d/builder
               chown -R builder:builder /workspace
               su - builder -c "
                 set -euo pipefail
                 cd /workspace/'"${pkg_dir}"'
-                makepkg --noconfirm
+                makepkg -s --noconfirm
                 makepkg --printsrcinfo > .SRCINFO
                 namcap PKGBUILD .SRCINFO || true
               "
