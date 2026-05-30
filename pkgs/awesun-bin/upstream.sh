@@ -35,6 +35,7 @@ pkg_get_update_params() {
 	fi
 
 	filename="awesun-${version}-x86_64.deb"
+	url="https://dl.oray.com/sl/linux/${filename}"
 
 	local tmpdir tmpfile sha256 actual_md5
 	tmpdir="$(mktemp -d)"

@@ -16,7 +16,7 @@ options=(!strip emptydirs)
 install="${pkgname}.install"
 backup=('etc/orayconfig.conf')
 source=("LICENSE::https://service.oray.com/question/1820.html")
-source_x86_64=("awesun-16.5.0.30560-x86_64.deb::https://dw.oray.com/sl/linux/awesun-16.5.0.30560-x86_64.deb")
+source_x86_64=("awesun-16.5.0.30560-x86_64.deb::https://dl.oray.com/sl/linux/awesun-16.5.0.30560-x86_64.deb")
 sha256sums=('SKIP')
 sha256sums_x86_64=('eda3fffe6d5324afbc4f939f0cb85c08b7851efad3c01878621474ec7503d10f')
 
