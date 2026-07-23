@@ -7,8 +7,9 @@ pkgdesc="VS Code-style terminal workbench plugin for Herdr (Explorer / SCM / Git
 arch=('x86_64' 'aarch64')
 url="https://github.com/xifan2333/herdr-corral"
 license=('MIT')
-depends=('herdr' 'glib2')
+depends=('glib2')
 optdepends=(
+  'herdr: launch as a left-docked sidebar plugin'
   'github-cli: GitHub sidebar and detail client'
   'nvim: owner-scoped editor / preview pane'
   'imv: open GitHub attachment images from the detail client'
