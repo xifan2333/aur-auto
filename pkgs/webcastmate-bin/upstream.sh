@@ -23,7 +23,7 @@ pkg_detect_latest() {
 pkg_get_update_params() {
 	local version="$1"
 	local base_url="https://github.com/xifan2333/webcast-mate/releases/download/v${version}"
-	local filename_x86_64="webcast-mate-linux-amd64"
+	local filename_x86_64="webcastmate-linux-amd64"
 	local url_x86_64="${base_url}/${filename_x86_64}"
 
 	# Download and calculate SHA256 for x86_64
@@ -49,13 +49,13 @@ pkg_update_files() {
 	local pkgbuild="${PKG_DIR}/PKGBUILD"
 
 	local base_url="${url%/*}"
-	local url_x86_64="${base_url}/webcast-mate-linux-amd64"
-	local url_aarch64="${base_url}/webcast-mate-linux-arm64"
+	local url_x86_64="${base_url}/webcastmate-linux-amd64"
+	local url_aarch64="${base_url}/webcastmate-linux-arm64"
 
 	sed -i "s/^pkgver=.*/pkgver=${pkgver}/" "${pkgbuild}"
 	sed -i "s/^pkgrel=.*/pkgrel=1/" "${pkgbuild}"
-	sed -i "s|^source_x86_64=.*|source_x86_64=(\"webcast-mate-linux-amd64-\${pkgver}::${url_x86_64}\")|" "${pkgbuild}"
-	sed -i "s|^source_aarch64=.*|source_aarch64=(\"webcast-mate-linux-arm64-\${pkgver}::${url_aarch64}\")|" "${pkgbuild}"
+	sed -i "s|^source_x86_64=.*|source_x86_64=(\"webcastmate-linux-amd64-\${pkgver}::${url_x86_64}\")|" "${pkgbuild}"
+	sed -i "s|^source_aarch64=.*|source_aarch64=(\"webcastmate-linux-arm64-\${pkgver}::${url_aarch64}\")|" "${pkgbuild}"
 	sed -i "s/^${hash_algo}sums_x86_64=.*/${hash_algo}sums_x86_64=('${checksum}')/" "${pkgbuild}"
 
 	echo "Warning: Only x86_64 checksum updated. Please verify aarch64 manually." >&2

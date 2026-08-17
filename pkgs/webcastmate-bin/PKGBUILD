@@ -1,6 +1,6 @@
 # Maintainer: xifan <xifan2333@gmail.com>
-pkgname=webcast-mate-bin
-_pkgname=webcast-mate
+pkgname=webcastmate-bin
+_pkgname=webcastmate
 pkgver=0.1.0
 pkgrel=1
 pkgdesc="Multi-platform live protocol CLI (no browser): login -> go-live RTMP -> live.json"
@@ -10,8 +10,8 @@ license=('MIT')
 provides=("${_pkgname}")
 conflicts=("${_pkgname}")
 options=(!strip)
-source_x86_64=("webcast-mate-linux-amd64-${pkgver}::https://github.com/xifan2333/webcast-mate/releases/download/v0.1.0/webcast-mate-linux-amd64")
-source_aarch64=("webcast-mate-linux-arm64-${pkgver}::https://github.com/xifan2333/webcast-mate/releases/download/v0.1.0/webcast-mate-linux-arm64")
+source_x86_64=("webcastmate-linux-amd64-${pkgver}::https://github.com/xifan2333/webcast-mate/releases/download/v0.1.0/webcastmate-linux-amd64")
+source_aarch64=("webcastmate-linux-arm64-${pkgver}::https://github.com/xifan2333/webcast-mate/releases/download/v0.1.0/webcastmate-linux-arm64")
 sha256sums_x86_64=('SKIP')
 sha256sums_aarch64=('SKIP')
 
@@ -20,8 +20,8 @@ package() {
 
 	local binary
 	case "${CARCH}" in
-		x86_64) binary="webcast-mate-linux-amd64-${pkgver}" ;;
-		aarch64) binary="webcast-mate-linux-arm64-${pkgver}" ;;
+		x86_64) binary="webcastmate-linux-amd64-${pkgver}" ;;
+		aarch64) binary="webcastmate-linux-arm64-${pkgver}" ;;
 	esac
 
 	install -Dm755 "${binary}" "${pkgdir}/usr/bin/${_pkgname}"
