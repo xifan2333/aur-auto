@@ -1,0 +1,9 @@
+# Lefthook configuration for aur-auto
+# https://github.com/evilmartians/lefthook
+
+pre-commit:
+  commands:
+    lint:
+      tags: backend lint
+      glob: "*"
+      run: bash scripts/lint.sh
