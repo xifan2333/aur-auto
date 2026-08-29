@@ -27,7 +27,7 @@ while [[ $# -gt 0 ]]; do
 			FORCE=1
 			shift
 			;;
-		-h|--help)
+		-h | --help)
 			print_usage
 			exit 0
 			;;
